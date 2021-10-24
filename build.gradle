@@ -15,6 +15,7 @@ plugins {
     id 'groovy'
     id 'org.springframework.experimental.aot' version '0.10.4'
     id 'org.graalvm.buildtools.native' version '0.9.3'
+    id "info.solidsoft.pitest" version "1.7.0"
 }
 
 apply plugin: 'spring-cloud-contract'
@@ -80,8 +81,6 @@ dependencies {
     contractTestImplementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
     contractTestImplementation "org.spockframework:spock-bom:${spockVersion}"
     contractTestImplementation "org.spockframework:spock-core:${spockVersion}"
-
-
     contractTestImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
 }
 
@@ -128,4 +127,12 @@ nativeBuild {
 
 nativeTest {
     classpath processAotTestResources.outputs, compileAotTestJava.outputs
+}
+
+pitest {
+    //adds dependency to org.pitest:pitest-junit5-plugin and sets "testPlugin" to "junit5"
+    testSourceSets = [sourceSets.test, sourceSets.integrationTest, sourceSets.contractTest]
+    junit5PluginVersion = '0.15'
+    outputFormats = ['XML', 'HTML']
+    timestampedReports = false
 }
