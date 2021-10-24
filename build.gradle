@@ -93,7 +93,7 @@ dependencyManagement {
 
 contracts {
     testFramework = org.springframework.cloud.contract.verifier.config.TestFramework.SPOCK
-    baseClassForTests = "com.joseyustiz.flightinterconnection.BaseMockMvcSpec"
+    baseClassForTests = "com.joseyustiz.flightinterconnection.BaseContractSpec"
     testMode = "WEBTESTCLIENT"
 
 }
