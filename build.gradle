@@ -60,14 +60,27 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j'
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
-    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
-    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    testImplementation "org.spockframework:spock-bom:${spockVersion}"
+    testImplementation "org.spockframework:spock-core:${spockVersion}"
+    testImplementation "org.spockframework:spock-spring:${spockVersion}"
+
+    integrationTestImplementation 'org.testcontainers:junit-jupiter'
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    contractTestImplementation 'io.rest-assured:spring-web-test-client'
+    contractTestImplementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    contractTestImplementation "org.spockframework:spock-bom:${spockVersion}"
+    contractTestImplementation "org.spockframework:spock-core:${spockVersion}"
+
+
+    contractTestImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
 }
 
 dependencyManagement {
