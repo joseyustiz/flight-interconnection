@@ -41,6 +41,7 @@ ext {
     set('testcontainersVersion', "1.16.0")
     set('groovyVersion', "3.0.9")
     set('spockVersion', "2.0-groovy-3.0")
+    set('mapstructVersion', "1.4.2.Final")
 }
 
 sourceSets {
@@ -63,6 +64,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j'
+
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+
     compileOnly 'org.projectlombok:lombok'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
