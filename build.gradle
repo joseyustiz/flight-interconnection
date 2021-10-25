@@ -77,6 +77,8 @@ dependencies {
 
     integrationTestImplementation 'org.testcontainers:junit-jupiter'
     integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test'
+    integrationTestImplementation 'io.projectreactor:reactor-test'
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     contractTestImplementation 'io.rest-assured:spring-web-test-client'
     contractTestImplementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
