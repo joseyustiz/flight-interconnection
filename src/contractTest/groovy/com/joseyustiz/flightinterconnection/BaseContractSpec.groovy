@@ -1,12 +1,19 @@
 package com.joseyustiz.flightinterconnection
 
-import com.joseyustiz.flightinterconnection.infrastructure.primary.web.GetRyanairInterconnectedFlightController
+
+import com.joseyustiz.flightinterconnection.core.service.GetInterconnectedFlightService
+import com.joseyustiz.flightinterconnection.infrastructure.config.WebRouterFunctionConfig
+import com.joseyustiz.flightinterconnection.infrastructure.primary.web.GetInterconnectedFlightHandler
 import io.restassured.module.webtestclient.RestAssuredWebTestClient
+import org.springframework.test.web.reactive.server.WebTestClient
 import spock.lang.Specification
 
 abstract class BaseContractSpec extends Specification {
 
-    def setup() {
-        RestAssuredWebTestClient.standaloneSetup(new GetRyanairInterconnectedFlightController())
+    void setup() {
+        RestAssuredWebTestClient.webTestClient(WebTestClient.bindToRouterFunction(
+                new WebRouterFunctionConfig(new GetInterconnectedFlightHandler(new GetInterconnectedFlightService())).interconnectionRoutes()).build())
+
+
     }
 }
