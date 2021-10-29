@@ -1,12 +1,18 @@
 package com.joseyustiz.flightinterconnection.infrastructure.primary.web;
 
 import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase;
-import com.joseyustiz.flightinterconnection.core.domain.AirportIataCode;
 import com.joseyustiz.flightinterconnection.core.domain.FlightDateTime;
+import com.joseyustiz.flightinterconnection.core.domain.SelfValidating;
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.dto.ApiErrorDto;
-import com.joseyustiz.flightinterconnection.infrastructure.primary.web.dto.ApiErrorDto.ApiErrorDtoBuilder;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -16,105 +22,108 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.stream.Collectors;
 
 import static com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase.Query;
+import static com.joseyustiz.flightinterconnection.core.domain.FlightDateTime.FORMATTER;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class GetInterconnectedFlightHandler implements HandlerFunction<ServerResponse> {
-    public static final String INVALID_DATETIME_FORMAT = "invalid format, it must be ISO-8601";
-    private final GetInterconnectedFlightUseCase useCase;
-    private final InterconnectedFlightMapper mapper;
 
-    public static final String PARAMETER_IS_REQUIRED = "parameter is required";
+    public static final String INVALID_DATETIME_FORMAT = "invalid format, it must be ISO-8601";
+    public static final String MUST_NOT_BE_NULL = "must not be null";
+    public static final String MUST_HAVE_3_ALPHABETIC_UPPER_LETTERS_CHARACTERS = "must have 3 alphabetic upper-letters characters";
+
     public static final String DEPARTURE_QUERY_PARAM = "departure";
     public static final String DEPARTURE_DATE_TIME_QUERY_PARAM = "departureDateTime";
     public static final String ARRIVAL_QUERY_PARAM = "arrival";
     public static final String ARRIVAL_DATE_TIME_QUERY_PARAM = "arrivalDateTime";
-    private static final RuntimeException QUERY_PARAMETERS_VERIFICATION_FAILED = new RuntimeException("Query Parameters Verification failed");
+
+    private final GetInterconnectedFlightUseCase useCase;
+    private final InterconnectedFlightMapper flightMapper;
 
     @Override
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-        final var apiError = verifyRequiredQueryParams(serverRequest);
-        if (!apiError.getErrors().isEmpty()) {
-            log.info("HttpCode 400 with apiError {}", apiError);
-            return ServerResponse.badRequest().contentType(MediaType.APPLICATION_JSON).bodyValue(apiError);
-        }
-        final var departureDateTime = serverRequest.queryParam(DEPARTURE_DATE_TIME_QUERY_PARAM).orElseThrow(() -> QUERY_PARAMETERS_VERIFICATION_FAILED);
-        final var arrivalDateTime = serverRequest.queryParam(ARRIVAL_DATE_TIME_QUERY_PARAM).orElseThrow(() -> QUERY_PARAMETERS_VERIFICATION_FAILED);
         try {
-            final var query = Query.builder()
-                    .departure(new AirportIataCode(serverRequest.queryParam(DEPARTURE_QUERY_PARAM).orElseThrow(() -> QUERY_PARAMETERS_VERIFICATION_FAILED)))
-                    .arrival(new AirportIataCode(serverRequest.queryParam(ARRIVAL_QUERY_PARAM).orElseThrow(() -> QUERY_PARAMETERS_VERIFICATION_FAILED)))
-                    .departureDateTime(new FlightDateTime(LocalDateTime.parse(departureDateTime, FlightDateTime.FORMATTER)))
-                    .arrivalDateTime(new FlightDateTime(LocalDateTime.parse(arrivalDateTime, FlightDateTime.FORMATTER)))
-                    .build();
+            QueryDto dto = buildQueryDto(serverRequest);
 
-            return Mono.from(useCase.handle(query)
-                            .map(mapper::toDto)
+            return Mono.from(useCase.handle(QueryMapper.INSTANCE.toDomain(dto))
+                            .map(flightMapper::toDto)
                             .collectList()
                             .flatMap(interconnectedFlights -> {
-                                log.info("HttpCode 200 for interconnectedFlights {} query {}",interconnectedFlights, query);
+                                log.info("HttpCode 200 for interconnectedFlights {} query {}", interconnectedFlights, dto);
                                 return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(interconnectedFlights);
                             }))
-                    .switchIfEmpty(Mono.defer(()->serverResponse200WithNoData(query)))
                     .onErrorResume(e -> {
-                        log.info("HttpCode 500 for query = {}", query, e);
+                        log.info("HttpCode 500 for query = {}", dto, e);
                         return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).build();
                     });
         } catch (ConstraintViolationException e) {
             final var errors = e.getConstraintViolations().stream()
-                    .map(v -> new ApiErrorDto.Error(v.getPropertyPath().toString(), e.getMessage()))
+                    .map(v -> new ApiErrorDto.Error(v.getPropertyPath().toString(), v.getMessageTemplate()))
                     .collect(Collectors.toList());
-            return ServerResponse.badRequest().contentType(MediaType.APPLICATION_JSON).body(ApiErrorDto.builder().errors(errors).build(), ApiErrorDto.class);
+            return ServerResponse.badRequest().contentType(MediaType.APPLICATION_JSON).bodyValue(ApiErrorDto.builder().errors(errors).build());
         }
     }
 
-    private Mono<ServerResponse> serverResponse200WithNoData(Query query) {
-        log.info("HttpCode 200 with empty body for query = {}", query);
-        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).build();
+    private QueryDto buildQueryDto(ServerRequest serverRequest) {
+        return QueryDto.builder()
+                .departureDateTime(serverRequest.queryParam(DEPARTURE_DATE_TIME_QUERY_PARAM).orElse(null))
+                .arrivalDateTime(serverRequest.queryParam(ARRIVAL_DATE_TIME_QUERY_PARAM).orElse(null))
+                .departure(serverRequest.queryParam(DEPARTURE_QUERY_PARAM).orElse(null))
+                .arrival(serverRequest.queryParam(ARRIVAL_QUERY_PARAM).orElse(null))
+                .build();
     }
 
-    private ApiErrorDto verifyRequiredQueryParams(ServerRequest serverRequest) {
-        final var apiErrorBuilder = ApiErrorDto.builder();
-        verifyRequiredQueryParam(serverRequest, apiErrorBuilder, DEPARTURE_QUERY_PARAM);
-        verifyDateFormatQueryParam(serverRequest, apiErrorBuilder, DEPARTURE_DATE_TIME_QUERY_PARAM);
-        verifyRequiredQueryParam(serverRequest, apiErrorBuilder, ARRIVAL_QUERY_PARAM);
-        verifyDateFormatQueryParam(serverRequest, apiErrorBuilder, ARRIVAL_DATE_TIME_QUERY_PARAM);
-        return apiErrorBuilder.build();
-    }
-
-    private void verifyRequiredQueryParam(ServerRequest serverRequest, ApiErrorDtoBuilder apiErrorBuilder, String queryParamName) {
-        final var queryParam = serverRequest.queryParam(queryParamName);
-        if (queryParam.isEmpty()) {
-            apiErrorBuilder.error(new ApiErrorDto.Error(queryParamName, PARAMETER_IS_REQUIRED));
-        }
-    }
-
-
-    private void verifyDateFormatQueryParam(ServerRequest serverRequest, ApiErrorDtoBuilder apiErrorBuilder, String queryParamName) {
-        final var queryParam = serverRequest.queryParam(queryParamName);
-        if (queryParam.isEmpty()) {
-            apiErrorBuilder.error(new ApiErrorDto.Error(queryParamName, PARAMETER_IS_REQUIRED));
-        }else{
-            try {
-                LocalDateTime.parse(queryParam.get(), FlightDateTime.FORMATTER);
-            }catch (DateTimeParseException e){
-                apiErrorBuilder.error(new ApiErrorDto.Error(queryParamName, INVALID_DATETIME_FORMAT));
-
-            }
-        }
-    }
-
-    private static class QueryDto{
+    @EqualsAndHashCode(callSuper = true)
+    @Builder
+    @Getter
+    static class QueryDto extends SelfValidating<QueryDto> {
+        @NotNull(message = MUST_NOT_BE_NULL)
+        @Pattern(regexp = "[A-Z]{3}", message = MUST_HAVE_3_ALPHABETIC_UPPER_LETTERS_CHARACTERS)
         String departure;
+        @NotNull(message = MUST_NOT_BE_NULL)
+        @Pattern(regexp = "[A-Z]{3}", message = MUST_HAVE_3_ALPHABETIC_UPPER_LETTERS_CHARACTERS)
         String arrival;
+        @Pattern(regexp = "(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})\\:(\\d{2})", message = INVALID_DATETIME_FORMAT)
+        @NotNull(message = MUST_NOT_BE_NULL)
         String departureDateTime;
+        @Pattern(regexp = "(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})\\:(\\d{2})", message = INVALID_DATETIME_FORMAT)
+        @NotNull(message = MUST_NOT_BE_NULL)
         String arrivalDateTime;
+
+        QueryDto(String departure, String arrival, String departureDateTime, String arrivalDateTime) {
+            this.departure = departure;
+            this.arrival = arrival;
+            this.departureDateTime = departureDateTime;
+            this.arrivalDateTime = arrivalDateTime;
+            this.validateSelf();
+        }
+    }
+
+
+    @Mapper
+    interface QueryMapper {
+        QueryMapper INSTANCE = Mappers.getMapper(QueryMapper.class);
+
+        @Mapping(target = "departure.value", source = "departure")
+        @Mapping(target = "arrival.value", source = "arrival")
+        @Mapping(target = "departureDateTime", source = "departureDateTime", qualifiedByName = "mapToFlightDateTime")
+        @Mapping(target = "arrivalDateTime", source = "arrivalDateTime", qualifiedByName = "mapToFlightDateTime")
+        Query toDomain(QueryDto dto);
+
+        @Named("mapToFlightDateTime")
+        default FlightDateTime mapToFlightDateTime(String value) {
+            if (value == null) {
+                return null;
+            }
+            return new FlightDateTime(LocalDateTime.parse(value, FORMATTER));
+        }
 
     }
 }

@@ -43,11 +43,12 @@ public class GetInterconnectedFlightHandlerIT {
         response.expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.errors.size()").isEqualTo(4)
-                .jsonPath("$.errors[*].message").value(hasItems(PARAMETER_IS_REQUIRED))
                 .jsonPath("$.errors[*].property")
                 .value(hasItems(DEPARTURE_QUERY_PARAM, DEPARTURE_DATE_TIME_QUERY_PARAM,
-                        ARRIVAL_QUERY_PARAM, ARRIVAL_DATE_TIME_QUERY_PARAM));
+                        ARRIVAL_QUERY_PARAM, ARRIVAL_DATE_TIME_QUERY_PARAM))
+                .jsonPath("$.errors.size()").isEqualTo(4)
+                .jsonPath("$.errors[*].message").value(hasItems(MUST_NOT_BE_NULL));
+
 
     }
 
