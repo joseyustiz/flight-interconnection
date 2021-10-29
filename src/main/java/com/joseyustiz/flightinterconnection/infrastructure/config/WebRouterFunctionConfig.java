@@ -14,13 +14,13 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @Configuration
 @RequiredArgsConstructor
 public class WebRouterFunctionConfig {
-    private final GetInterconnectedFlightHandler handler;
+    private final GetInterconnectedFlightHandler getInterconnectedFlightHandler;
     @Bean
     public RouterFunction<ServerResponse> interconnectionRoutes() {
 
         return RouterFunctions.route()
                 .path("/v1/flights/interconnections", builder -> builder
-                        .GET("", accept(MediaType.APPLICATION_JSON), handler::getInterconnections))
+                        .GET("", accept(MediaType.APPLICATION_JSON), getInterconnectedFlightHandler))
                 .build();
     }
 
