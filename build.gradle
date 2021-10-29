@@ -68,6 +68,8 @@ dependencies {
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+
 
     compileOnly 'org.projectlombok:lombok'
 
@@ -81,10 +83,14 @@ dependencies {
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.spockframework:spock-spring:${spockVersion}"
 
+    integrationTestImplementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    integrationTestAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    integrationTestAnnotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
     integrationTestImplementation 'org.testcontainers:junit-jupiter'
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-validation'
     integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test'
     integrationTestImplementation 'io.projectreactor:reactor-test'
-    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     contractTestImplementation 'io.rest-assured:spring-web-test-client'
     contractTestImplementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
