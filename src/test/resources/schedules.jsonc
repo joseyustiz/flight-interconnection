@@ -1,0 +1,105 @@
+//https://timtbl-api.ryanair.com/3/schedules/DUB/WRO/years/2021/months/10
+{
+  "month": 10,
+  "days": [
+    {
+      "day": 20,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "09:35",
+          "arrivalTime": "13:05"
+        }
+      ]
+    },
+    {
+      "day": 21,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:30",
+          "arrivalTime": "23:00"
+        }
+      ]
+    },
+    {
+      "day": 22,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "18:05",
+          "arrivalTime": "21:35"
+        }
+      ]
+    },
+    {
+      "day": 24,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "06:50",
+          "arrivalTime": "10:20"
+        }
+      ]
+    },
+    {
+      "day": 25,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "09:50",
+          "arrivalTime": "13:20"
+        }
+      ]
+    },
+    {
+      "day": 27,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "09:35",
+          "arrivalTime": "13:05"
+        }
+      ]
+    },
+    {
+      "day": 28,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:30",
+          "arrivalTime": "23:00"
+        }
+      ]
+    },
+    {
+      "day": 29,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "18:05",
+          "arrivalTime": "21:35"
+        }
+      ]
+    },
+    {
+      "day": 31,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:50",
+          "arrivalTime": "23:15"
+        }
+      ]
+    }
+  ]
+}
