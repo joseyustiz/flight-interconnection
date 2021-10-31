@@ -6,14 +6,13 @@ import com.joseyustiz.flightinterconnection.core.domain.SelfValidating;
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.dto.ApiErrorDto;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.HandlerFunction;
@@ -53,16 +52,18 @@ public class GetInterconnectedFlightHandler implements HandlerFunction<ServerRes
             QueryDto dto = buildQueryDto(serverRequest);
 
             return Mono.from(useCase.handle(QueryMapper.INSTANCE.toDomain(dto))
-                            .map(flightMapper::toDto)
+                            .map(flightMapper::toInterconnectedFlightDto)
                             .collectList()
                             .flatMap(interconnectedFlights -> {
                                 log.info("HttpCode 200 for interconnectedFlights {} query {}", interconnectedFlights, dto);
                                 return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(interconnectedFlights);
-                            }))
-                    .onErrorResume(e -> {
-                        log.info("HttpCode 500 for query = {}", dto, e);
-                        return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).build();
-                    });
+                            })
+//                    .onErrorResume(e -> {
+//                        log.info("HttpCode 500 for query = {}", dto, e);
+//                        return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).build();
+//                    })
+
+            );
         } catch (ConstraintViolationException e) {
             final var errors = e.getConstraintViolations().stream()
                     .map(v -> new ApiErrorDto.Error(v.getPropertyPath().toString(), v.getMessageTemplate()))
@@ -80,9 +81,9 @@ public class GetInterconnectedFlightHandler implements HandlerFunction<ServerRes
                 .build();
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode(callSuper = false)
     @Builder
-    @Getter
+    @Value
     static class QueryDto extends SelfValidating<QueryDto> {
         @NotNull(message = MUST_NOT_BE_NULL)
         @Pattern(regexp = "[A-Z]{3}", message = MUST_HAVE_3_ALPHABETIC_UPPER_LETTERS_CHARACTERS)

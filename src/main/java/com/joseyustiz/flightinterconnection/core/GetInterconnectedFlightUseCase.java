@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public interface GetInterconnectedFlightUseCase {
     Flux<InterconnectedFlight> handle(Query query);
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode(callSuper = false)
     @Value
     @Builder
     class Query extends SelfValidating<Query> {

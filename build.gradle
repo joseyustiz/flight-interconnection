@@ -68,7 +68,6 @@ dependencies {
 
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 
 
@@ -149,6 +148,8 @@ pitest {
     //adds dependency to org.pitest:pitest-junit5-plugin and sets "testPlugin" to "junit5"
     testSourceSets = [sourceSets.test, sourceSets.integrationTest, sourceSets.contractTest]
     junit5PluginVersion = '0.15'
+    threads = 4
+    jvmArgs = ['-Xmx1024m']
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
 }
