@@ -7,10 +7,12 @@ import com.joseyustiz.flightinterconnection.core.port.secondary.RoutePort;
 import com.joseyustiz.flightinterconnection.core.port.secondary.SchedulePort;
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.InterconnectedFlightMapper;
 import com.joseyustiz.flightinterconnection.infrastructure.secondary.RouteMapper;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableCaching
 public class ApplicationConfig {
 
     @Bean

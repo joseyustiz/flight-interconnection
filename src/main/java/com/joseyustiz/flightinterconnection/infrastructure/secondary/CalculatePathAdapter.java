@@ -35,7 +35,7 @@ public class CalculatePathAdapter implements CalculatePathPort {
 
         final var allDirectedPaths = new AllDirectedPaths<>(routesGraph);
         final var allPaths = allDirectedPaths.getAllPaths(query.getDeparture(), query.getArrival(), true, 100);
-        allPaths.parallelStream().forEach(path -> {
+        allPaths.forEach(path -> {
                     final var connections = path.getEdgeList();
                     if (isDirectFlight(path)) {
                         final var flightScheduleWeightedEdge = connections.get(0);

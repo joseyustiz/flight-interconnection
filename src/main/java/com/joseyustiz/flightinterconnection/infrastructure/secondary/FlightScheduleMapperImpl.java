@@ -4,6 +4,7 @@ import com.joseyustiz.flightinterconnection.core.domain.AirportIataCode;
 import com.joseyustiz.flightinterconnection.core.domain.FlightDateTime;
 import com.joseyustiz.flightinterconnection.core.domain.FlightSchedule;
 import com.joseyustiz.flightinterconnection.core.domain.ScheduleYearMonth;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +18,17 @@ import java.util.List;
 public class FlightScheduleMapperImpl implements FlightScheduleMapper {
     @Override
     public List<FlightSchedule> toDomain(ScheduleHttpAdapter.ScheduleDto dto,
-                                         AirportIataCode departure, AirportIataCode arrival, ScheduleYearMonth yearMonth) {
+                                         @NonNull AirportIataCode departure, @NonNull AirportIataCode arrival, @NonNull ScheduleYearMonth yearMonth) {
+        if(dto == null){
+            return  null;
+        }
         List<FlightSchedule> result = new ArrayList<>();
-        dto.days.parallelStream().forEach(daySchedule -> {
+
+        if (dto.days == null){
+            return result;
+        }
+
+        dto.days.forEach(daySchedule -> {
             for (ScheduleHttpAdapter.TimeScheduleDto timeSchedule : daySchedule.flights) {
 
                 final var departureTime = LocalTime.parse(timeSchedule.getDepartureTime());

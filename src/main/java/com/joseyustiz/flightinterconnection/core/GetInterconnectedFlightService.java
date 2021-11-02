@@ -6,13 +6,16 @@ import com.joseyustiz.flightinterconnection.core.port.secondary.CalculatePathPor
 import com.joseyustiz.flightinterconnection.core.port.secondary.RoutePort;
 import com.joseyustiz.flightinterconnection.core.port.secondary.SchedulePort;
 import com.joseyustiz.flightinterconnection.infrastructure.secondary.dto.FlightScheduleWeightedEdge;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,22 +38,28 @@ public class GetInterconnectedFlightService implements GetInterconnectedFlightUs
     }
 
     public DirectedWeightedMultigraph<AirportIataCode, FlightScheduleWeightedEdge>
-    calculateRoutesGraph(List<ScheduleYearMonth> yearMonthRangeDesired, Query query, Set<Route> routes) {
+    calculateRoutesGraph(@NonNull List<ScheduleYearMonth> yearMonthRangeDesired,@NonNull Query query,@NonNull Set<Route> routes) {
         final var routesGraph = new DirectedWeightedMultigraph<AirportIataCode, FlightScheduleWeightedEdge>(FlightScheduleWeightedEdge.class);
-        routes.forEach(r -> {
-            routesGraph.addVertex(r.getDepartureAirport());
-            routesGraph.addVertex(r.getArrivalAirport());
-            yearMonthRangeDesired.parallelStream().forEach(yearMonth -> {
-                        log.info("Getting Schedule for yearMonth={} for route{}", yearMonth, r);
-                        schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(
-                                        r.getDepartureAirport(), r.getArrivalAirport(), query, yearMonth)
-                                .parallelStream().forEach(fs -> routesGraph.addEdge(r.getDepartureAirport(), r.getArrivalAirport(),
-                                                new FlightScheduleWeightedEdge(fs.getDepartureDateTime().getValue(), fs.getArrivalDateTime().getValue())
-                                        )
-                                );
-                    }
-            );
-        });
+        if(!routes.isEmpty()) {
+            routes.parallelStream().forEach(r -> {
+                routesGraph.addVertex(r.getDepartureAirport());
+                routesGraph.addVertex(r.getArrivalAirport());
+                yearMonthRangeDesired.stream().filter(Objects::nonNull).forEach(yearMonth -> {
+                            log.info("Getting Schedule for yearMonth={} for route{}", yearMonth, r);
+                            schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(
+                                            r.getDepartureAirport(), r.getArrivalAirport(), query, yearMonth)
+                                    .stream().filter(Objects::nonNull).collect(Collectors.toList())
+                                    .forEach(fs -> {
+                                                log.info("adding Edge = {}", fs);
+                                                routesGraph.addEdge(r.getDepartureAirport(), r.getArrivalAirport(),
+                                                        new FlightScheduleWeightedEdge(fs.getDepartureDateTime().getValue(), fs.getArrivalDateTime().getValue())
+                                                );
+                                            }
+                                    );
+                        }
+                );
+            });
+        }
         return routesGraph;
     }
 
