@@ -24,15 +24,15 @@ The application is mainly based on Spring Projects, with exception of mapstruct,
 
 
 ## Quality Techniques
-* Unit Testing `gradle test` 
-* Integration Testing `gradle integrationTest`
-* Consumer-Driven Contracts (CDC) `gradle contractTest`, which generates a stub in the build/libs folder with name flight-interconnection-0.0.1-SNAPSHOT-stubs.jar  
-* Mutation Testing `gradle pitest`. Its report is at build/reports/pitest/index.html
+* Unit Testing `sh gradlew test` 
+* Integration Testing `sh gradlew integrationTest`
+* Consumer-Driven Contracts (CDC) `sh gradlew contractTest`, which generates a stub in the build/libs folder with name flight-interconnection-0.0.1-SNAPSHOT-stubs.jar  
+* Mutation Testing `sh gradlew pitest`. Its report is at build/reports/pitest/index.html
 
 
 ## Running
 In order to run the application you execute the following commands:
-* `gradle build`
+* `sh gradlew build`
 * `java -jar build/libs/flight-interconnection-0.0.1-SNAPSHOT.jar`.
 
 ## Example request
