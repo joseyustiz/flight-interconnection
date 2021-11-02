@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Value
-public class FlightDateTime {
+public class FlightDateTime implements Serializable {
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     @NotNull
     LocalDateTime value;

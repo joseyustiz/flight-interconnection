@@ -11,6 +11,7 @@ import reactor.core.publisher.Flux;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 public interface GetInterconnectedFlightUseCase {
     Flux<InterconnectedFlight> handle(Query query);
@@ -18,7 +19,7 @@ public interface GetInterconnectedFlightUseCase {
     @EqualsAndHashCode(callSuper = false)
     @Value
     @Builder
-    class Query extends SelfValidating<Query> {
+    class Query extends SelfValidating<Query> implements Serializable {
         @NotNull(message = "must not be null")
         @Valid
         AirportIataCode departure;

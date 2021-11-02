@@ -1,5 +1,6 @@
 package com.joseyustiz.flightinterconnection.infrastructure.primary.web;
 
+import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightDelegate;
 import com.joseyustiz.flightinterconnection.core.domain.AirportIataCode;
 import com.joseyustiz.flightinterconnection.core.domain.FlightDateTime;
 import com.joseyustiz.flightinterconnection.core.domain.FlightSchedule;
@@ -70,6 +71,8 @@ public class GetInterconnectedFlightHandlerIT {
 
     @Autowired
     private WebTestClient webClient;
+    @MockBean
+    private GetInterconnectedFlightDelegate delegate;
 
     @MockBean
     private GetInterconnectedFlightUseCase service;

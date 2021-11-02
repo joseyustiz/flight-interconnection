@@ -17,6 +17,8 @@ import reactor.core.publisher.Flux;
 
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,10 +28,14 @@ public class CalculatePathAdapter implements CalculatePathPort {
 
     public Flux<InterconnectedFlight> calculateInterconnectedFlights(@NonNull GetInterconnectedFlightUseCase.Query query,
                                                                      @NonNull DirectedWeightedMultigraph<AirportIataCode, FlightScheduleWeightedEdge> routesGraph) {
+        return Flux.fromIterable(calculateInterconnectedFlightsCollection(query,routesGraph ));
+    }
+    public List<InterconnectedFlight> calculateInterconnectedFlightsCollection(@NonNull GetInterconnectedFlightUseCase.Query query,
+                                                                            @NonNull DirectedWeightedMultigraph<AirportIataCode, FlightScheduleWeightedEdge> routesGraph) {
 
 
         if (routesGraph.edgeSet().size() == 0) {
-            return Flux.empty();
+            return Collections.emptyList();
         }
         log.info("******Number of edges={}********", routesGraph.edgeSet().size());
 
@@ -64,8 +70,8 @@ public class CalculatePathAdapter implements CalculatePathPort {
                 }
         );
         log.info("resultPaths={}", resultPaths);
-        return Flux.fromStream(resultPaths.stream()
-                .map(this::mapToInterconnectedFlight));
+        return resultPaths.stream()
+                .map(this::mapToInterconnectedFlight).collect(Collectors.toList());
     }
 
     public boolean isFlightWithInDesiredSchedule(GetInterconnectedFlightUseCase.Query query, FlightScheduleWeightedEdge flightScheduleWeightedEdge) {

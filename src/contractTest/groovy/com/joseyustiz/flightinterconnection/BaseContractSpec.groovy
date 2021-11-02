@@ -1,5 +1,6 @@
 package com.joseyustiz.flightinterconnection
 
+import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightDelegate
 import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightService
 import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase
 import com.joseyustiz.flightinterconnection.infrastructure.config.WebRouterFunctionConfig
@@ -19,7 +20,8 @@ abstract class BaseContractSpec extends Specification {
         def flightScheduleMapper = new FlightScheduleMapperImpl();
         def schedulePort = new ScheduleHttpAdapter(flightScheduleMapper)
         def calculatePathPort = new CalculatePathAdapter()
-        def service = new GetInterconnectedFlightService(routePort, schedulePort, calculatePathPort)
+        def delegate = new GetInterconnectedFlightDelegate(routePort, schedulePort, calculatePathPort)
+        def service = new GetInterconnectedFlightService(delegate)
         service.handle(any() as GetInterconnectedFlightUseCase.Query) >> Flux.empty()
         RestAssuredWebTestClient.webTestClient(WebTestClient.bindToRouterFunction(
                 new WebRouterFunctionConfig(new GetInterconnectedFlightHandler(service, InterconnectedFlightMapper.INSTANCE))

@@ -1,5 +1,6 @@
 package com.joseyustiz.flightinterconnection.infrastructure.config;
 
+import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightDelegate;
 import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.core.port.secondary.CalculatePathPort;
 import com.joseyustiz.flightinterconnection.core.port.secondary.RoutePort;
@@ -16,8 +17,8 @@ class ApplicationConfigTest {
         RoutePort routePort = Mockito.mock(RoutePort.class);
         SchedulePort schedulePort = Mockito.mock(SchedulePort.class);
         CalculatePathPort calculatePathPort = Mockito.mock(CalculatePathPort.class);
-
-        final var useCase = new ApplicationConfig().getInterconnectedFlightUseCase(routePort, schedulePort, calculatePathPort);
+        GetInterconnectedFlightDelegate delegate = new GetInterconnectedFlightDelegate(routePort, schedulePort, calculatePathPort);
+        final var useCase = new ApplicationConfig().getInterconnectedFlightUseCase(delegate);
 
         assertThat(useCase).isNotNull();
         assertThat(useCase).isInstanceOf(GetInterconnectedFlightUseCase.class);

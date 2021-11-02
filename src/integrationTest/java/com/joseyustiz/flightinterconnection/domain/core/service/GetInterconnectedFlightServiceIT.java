@@ -1,5 +1,6 @@
 package com.joseyustiz.flightinterconnection.domain.core.service;
 
+import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightDelegate;
 import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightService;
 import com.joseyustiz.flightinterconnection.core.domain.*;
 import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
@@ -29,7 +30,8 @@ public class GetInterconnectedFlightServiceIT {
     RoutePort routePort = Mockito.mock(RoutePort.class);
     SchedulePort schedulePort = Mockito.mock(SchedulePort.class);
     CalculatePathPort calculatePathPort = new CalculatePathAdapter();
-    GetInterconnectedFlightService service = new GetInterconnectedFlightService(routePort, schedulePort, calculatePathPort);
+    GetInterconnectedFlightDelegate delegate = new GetInterconnectedFlightDelegate(routePort, schedulePort, calculatePathPort);
+    GetInterconnectedFlightService service = new GetInterconnectedFlightService(delegate);
 
 
     @Test

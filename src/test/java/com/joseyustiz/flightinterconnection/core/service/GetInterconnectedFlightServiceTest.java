@@ -1,5 +1,6 @@
 package com.joseyustiz.flightinterconnection.core.service;
 
+import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightDelegate;
 import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightService;
 import com.joseyustiz.flightinterconnection.core.domain.*;
 import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
@@ -90,7 +91,9 @@ class GetInterconnectedFlightServiceTest {
         routePort = Mockito.mock(RoutePort.class);
         schedulePort = Mockito.mock(SchedulePort.class);
         calculatePathPort = Mockito.mock(CalculatePathPort.class);
-        service = new GetInterconnectedFlightService(routePort, schedulePort, calculatePathPort);
+
+        GetInterconnectedFlightDelegate delegate = new GetInterconnectedFlightDelegate(routePort, schedulePort, calculatePathPort);
+        service = new GetInterconnectedFlightService(delegate);
     }
 
     @Test
@@ -128,7 +131,7 @@ class GetInterconnectedFlightServiceTest {
                 .thenReturn(Set.of(ROUTE_DUB_WRO, ROUTE_DUB_STN));
         when(schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(any(AirportIataCode.class), any(AirportIataCode.class), any(Query.class), any(ScheduleYearMonth.class)))
                 .thenReturn(Collections.emptyList());
-        when(calculatePathPort.calculateInterconnectedFlights(any(), any()))
+        when(calculatePathPort.calculateInterconnectedFlightsCollection(any(), any()))
                 .thenThrow(new RuntimeException(message));
         final var exception = assertThrows(RuntimeException.class, () -> service.handle(VALID_QUERY));
 

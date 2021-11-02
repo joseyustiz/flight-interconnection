@@ -7,8 +7,11 @@ import com.joseyustiz.flightinterconnection.infrastructure.secondary.dto.FlightS
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
+
 public interface CalculatePathPort {
     Flux<InterconnectedFlight> calculateInterconnectedFlights(GetInterconnectedFlightUseCase.Query query, DirectedWeightedMultigraph<AirportIataCode, FlightScheduleWeightedEdge> routesGraph );
+    List<InterconnectedFlight> calculateInterconnectedFlightsCollection(GetInterconnectedFlightUseCase.Query query, DirectedWeightedMultigraph<AirportIataCode, FlightScheduleWeightedEdge> routesGraph );
 
 
 }
