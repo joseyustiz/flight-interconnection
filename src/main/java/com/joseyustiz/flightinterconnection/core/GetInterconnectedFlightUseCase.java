@@ -39,5 +39,7 @@ public interface GetInterconnectedFlightUseCase {
             this.arrivalDateTime = arrivalDateTime;
             this.validateSelf();
         }
+
+
     }
 }

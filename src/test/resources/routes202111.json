@@ -1,0 +1,236 @@
+{
+  "month": 11,
+  "days": [
+    {
+      "day": 1,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:20",
+          "arrivalTime": "22:45"
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "20:00",
+          "arrivalTime": "23:25"
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:10",
+          "arrivalTime": "22:35"
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "09:15",
+          "arrivalTime": "12:40"
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:50",
+          "arrivalTime": "23:15"
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:20",
+          "arrivalTime": "22:45"
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "20:00",
+          "arrivalTime": "23:25"
+        }
+      ]
+    },
+    {
+      "day": 11,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:10",
+          "arrivalTime": "22:35"
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "09:15",
+          "arrivalTime": "12:40"
+        }
+      ]
+    },
+    {
+      "day": 14,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:50",
+          "arrivalTime": "23:15"
+        }
+      ]
+    },
+    {
+      "day": 15,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:20",
+          "arrivalTime": "22:45"
+        }
+      ]
+    },
+    {
+      "day": 17,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "20:00",
+          "arrivalTime": "23:25"
+        }
+      ]
+    },
+    {
+      "day": 18,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:10",
+          "arrivalTime": "22:35"
+        }
+      ]
+    },
+    {
+      "day": 19,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "09:15",
+          "arrivalTime": "12:40"
+        }
+      ]
+    },
+    {
+      "day": 21,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:50",
+          "arrivalTime": "23:15"
+        }
+      ]
+    },
+    {
+      "day": 22,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:20",
+          "arrivalTime": "22:45"
+        }
+      ]
+    },
+    {
+      "day": 24,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "20:00",
+          "arrivalTime": "23:25"
+        }
+      ]
+    },
+    {
+      "day": 25,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:10",
+          "arrivalTime": "22:35"
+        }
+      ]
+    },
+    {
+      "day": 26,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "09:15",
+          "arrivalTime": "12:40"
+        }
+      ]
+    },
+    {
+      "day": 28,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:50",
+          "arrivalTime": "23:15"
+        }
+      ]
+    },
+    {
+      "day": 29,
+      "flights": [
+        {
+          "carrierCode": "FR",
+          "number": "1926",
+          "departureTime": "19:20",
+          "arrivalTime": "22:45"
+        }
+      ]
+    }
+  ]
+}

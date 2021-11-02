@@ -13,7 +13,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class GetInterconnectedFlightHandler$QueryMapperTest {
     private static final QueryMapper MAPPER = QueryMapper.INSTANCE;
-    public static final LocalDateTime LOCAL_DATE_TIME = LocalDateTime.of(2021, 10, 30, 22, 0);
+    private static final LocalDateTime LOCAL_DATE_TIME = LocalDateTime.of(2021, 10, 30, 22, 0);
 
     @Test
     void nullDto_toDomainReturnNull() {
