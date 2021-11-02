@@ -36,17 +36,41 @@ In order to run the application you execute the following commands:
 * `java -jar build/libs/flight-interconnection-0.0.1-SNAPSHOT.jar`.
 
 ## Example request and response
-* `curl localhost:8080/v1/flights/interconnections\?departure=VLC\&arrival=TFS\&departureDateTime=2021-11-02T06:00\&arrivalDateTime=2021-11-02T12:00`
+Querying flights between two days (departureDateTime=2021-11-02T18:00 and arrivalDateTime=2021-11-03T13:00) from VLC to TFS
+* `curl http://localhost:8080/v1/flights/interconnections\?departure=VLC\&arrival=TFS\&departureDateTime=2021-11-02T18:00\&arrivalDateTime=2021-11-03T13:00`
 ```json
 [
   {
-    "stops": 1,
+    "stops": 2,
     "legs": [
       {
         "departureAirport": "VLC",
+        "arrivalAirport": "CRL",
+        "departureDateTime": "2021-11-02T20:30",
+        "arrivalDateTime": "2021-11-02T22:50"
+      },
+      {
+        "departureAirport": "CRL",
         "arrivalAirport": "TFS",
-        "arrivalDateTime": "2021-11-02T08:45",
-        "departureDateTime": "2021-11-02T06:35"
+        "departureDateTime": "2021-11-03T06:35",
+        "arrivalDateTime": "2021-11-03T10:05"
+      }
+    ]
+  },
+  {
+    "stops": 2,
+    "legs": [
+      {
+        "departureAirport": "VLC",
+        "arrivalAirport": "BGY",
+        "departureDateTime": "2021-11-02T20:10",
+        "arrivalDateTime": "2021-11-02T22:05"
+      },
+      {
+        "departureAirport": "BGY",
+        "arrivalAirport": "TFS",
+        "departureDateTime": "2021-11-03T07:25",
+        "arrivalDateTime": "2021-11-03T10:50"
       }
     ]
   }
