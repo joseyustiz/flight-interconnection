@@ -6,6 +6,7 @@ import com.joseyustiz.flightinterconnection.core.port.secondary.CalculatePathPor
 import com.joseyustiz.flightinterconnection.core.port.secondary.RoutePort;
 import com.joseyustiz.flightinterconnection.core.port.secondary.SchedulePort;
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.InterconnectedFlightMapper;
+import com.joseyustiz.flightinterconnection.infrastructure.secondary.RouteMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,6 +21,11 @@ public class ApplicationConfig {
     @Bean
     public InterconnectedFlightMapper getInterconnectedFlightMapper(){
         return InterconnectedFlightMapper.INSTANCE;
+    }
+
+    @Bean
+    public RouteMapper getRouteMapper(){
+        return RouteMapper.INSTANCE;
     }
 
 }

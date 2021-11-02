@@ -13,12 +13,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
@@ -50,20 +52,20 @@ public class GetInterconnectedFlightHandler implements HandlerFunction<ServerRes
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
         try {
             QueryDto dto = buildQueryDto(serverRequest);
-
-            return Mono.from(useCase.handle(QueryMapper.INSTANCE.toDomain(dto))
-                            .map(flightMapper::toInterconnectedFlightDto)
-                            .collectList()
-                            .flatMap(interconnectedFlights -> {
-                                log.info("HttpCode 200 for interconnectedFlights {} query {}", interconnectedFlights, dto);
-                                return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(interconnectedFlights);
-                            })
-//                    .onErrorResume(e -> {
-//                        log.info("HttpCode 500 for query = {}", dto, e);
-//                        return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).build();
-//                    })
-
-            );
+            return Mono.fromCallable(() -> QueryMapper.INSTANCE.toDomain(dto))
+                    .map(useCase::handle)
+                    .flatMapMany(interconnectedFlight->interconnectedFlight)
+                    .map(flightMapper::toInterconnectedFlightDto)
+                    .collectList()
+                    .flatMap(interconnectedFlights -> {
+                        log.info("HttpCode 200 for interconnectedFlights {} query {}", interconnectedFlights, dto);
+                        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(interconnectedFlights);
+                    })
+                    .onErrorResume(e -> {
+                        log.info("HttpCode 500 for query = {}", dto, e);
+                        return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).build();
+                    })
+                    .subscribeOn(Schedulers.boundedElastic());
         } catch (ConstraintViolationException e) {
             final var errors = e.getConstraintViolations().stream()
                     .map(v -> new ApiErrorDto.Error(v.getPropertyPath().toString(), v.getMessageTemplate()))
