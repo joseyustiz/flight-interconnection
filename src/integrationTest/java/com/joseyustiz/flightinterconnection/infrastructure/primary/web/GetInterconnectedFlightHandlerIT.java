@@ -1,10 +1,10 @@
 package com.joseyustiz.flightinterconnection.infrastructure.primary.web;
 
-import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.core.domain.AirportIataCode;
 import com.joseyustiz.flightinterconnection.core.domain.FlightDateTime;
 import com.joseyustiz.flightinterconnection.core.domain.FlightSchedule;
 import com.joseyustiz.flightinterconnection.core.domain.InterconnectedFlight;
+import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.infrastructure.config.ApplicationConfig;
 import com.joseyustiz.flightinterconnection.infrastructure.config.WebRouterFunctionConfig;
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.dto.InterconnectedFlightDto;

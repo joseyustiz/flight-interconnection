@@ -1,9 +1,9 @@
 package com.joseyustiz.flightinterconnection.infrastructure.secondary;
 
-import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.core.domain.AirportIataCode;
 import com.joseyustiz.flightinterconnection.core.domain.FlightDateTime;
 import com.joseyustiz.flightinterconnection.core.domain.InterconnectedFlight;
+import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.infrastructure.secondary.dto.FlightScheduleWeightedEdge;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DirectedWeightedMultigraph;

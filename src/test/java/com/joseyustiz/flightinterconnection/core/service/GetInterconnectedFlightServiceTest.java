@@ -1,7 +1,8 @@
 package com.joseyustiz.flightinterconnection.core.service;
 
-import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase;
+import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightService;
 import com.joseyustiz.flightinterconnection.core.domain.*;
+import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.core.port.secondary.CalculatePathPort;
 import com.joseyustiz.flightinterconnection.core.port.secondary.RoutePort;
 import com.joseyustiz.flightinterconnection.core.port.secondary.SchedulePort;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase.Query;
+import static com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase.Query;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

@@ -1,7 +1,7 @@
-package com.joseyustiz.flightinterconnection.core.service;
+package com.joseyustiz.flightinterconnection.core;
 
-import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.core.domain.*;
+import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.core.port.secondary.CalculatePathPort;
 import com.joseyustiz.flightinterconnection.core.port.secondary.RoutePort;
 import com.joseyustiz.flightinterconnection.core.port.secondary.SchedulePort;

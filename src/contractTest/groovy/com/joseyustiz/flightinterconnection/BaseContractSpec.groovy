@@ -1,7 +1,7 @@
 package com.joseyustiz.flightinterconnection
 
-import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase
-import com.joseyustiz.flightinterconnection.core.service.GetInterconnectedFlightService
+import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightService
+import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase
 import com.joseyustiz.flightinterconnection.infrastructure.config.WebRouterFunctionConfig
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.GetInterconnectedFlightHandler
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.InterconnectedFlightMapper

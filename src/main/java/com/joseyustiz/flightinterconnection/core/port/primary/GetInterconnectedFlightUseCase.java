@@ -1,4 +1,4 @@
-package com.joseyustiz.flightinterconnection.core;
+package com.joseyustiz.flightinterconnection.core.port.primary;
 
 import com.joseyustiz.flightinterconnection.core.domain.AirportIataCode;
 import com.joseyustiz.flightinterconnection.core.domain.FlightDateTime;

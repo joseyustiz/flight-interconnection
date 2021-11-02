@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase.Query;
+import static com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase.Query;
 import static com.joseyustiz.flightinterconnection.infrastructure.primary.web.GetInterconnectedFlightHandler.QueryDto;
 import static com.joseyustiz.flightinterconnection.infrastructure.primary.web.GetInterconnectedFlightHandler.QueryMapper;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

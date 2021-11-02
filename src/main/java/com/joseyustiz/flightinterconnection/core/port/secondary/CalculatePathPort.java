@@ -1,8 +1,8 @@
 package com.joseyustiz.flightinterconnection.core.port.secondary;
 
-import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.core.domain.AirportIataCode;
 import com.joseyustiz.flightinterconnection.core.domain.InterconnectedFlight;
+import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.infrastructure.secondary.dto.FlightScheduleWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import reactor.core.publisher.Flux;

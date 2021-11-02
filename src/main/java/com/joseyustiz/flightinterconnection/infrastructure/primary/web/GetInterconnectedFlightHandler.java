@@ -1,8 +1,8 @@
 package com.joseyustiz.flightinterconnection.infrastructure.primary.web;
 
-import com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.core.domain.FlightDateTime;
 import com.joseyustiz.flightinterconnection.core.domain.SelfValidating;
+import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase;
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.dto.ApiErrorDto;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -26,8 +26,8 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-import static com.joseyustiz.flightinterconnection.core.GetInterconnectedFlightUseCase.Query;
 import static com.joseyustiz.flightinterconnection.core.domain.FlightDateTime.FORMATTER;
+import static com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedFlightUseCase.Query;
 
 @Component
 @RequiredArgsConstructor
