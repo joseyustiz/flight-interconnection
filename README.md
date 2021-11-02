@@ -35,5 +35,20 @@ In order to run the application you execute the following commands:
 * `sh gradlew build`
 * `java -jar build/libs/flight-interconnection-0.0.1-SNAPSHOT.jar`.
 
-## Example request
+## Example request and response
 * `curl localhost:8080/v1/flights/interconnections\?departure=VLC\&arrival=TFS\&departureDateTime=2021-11-02T06:00\&arrivalDateTime=2021-11-02T12:00`
+```json
+[
+  {
+    "stops": 1,
+    "legs": [
+      {
+        "departureAirport": "VLC",
+        "arrivalAirport": "TFS",
+        "arrivalDateTime": "2021-11-02T08:45",
+        "departureDateTime": "2021-11-02T06:35"
+      }
+    ]
+  }
+]
+```
