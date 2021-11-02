@@ -32,7 +32,7 @@ public class GetInterconnectedFlightService implements GetInterconnectedFlightUs
         final var ryanairRoutesCollection = routePort.getRoutesByConnectingAirportAndOperatorAsList(AirportIataCode.NULL_AIRPORT, RYANAIR);
         log.info("The total ryanair routes are={}",ryanairRoutesCollection.size());
         final var routesGraph = calculateRoutesGraph(searchYearMonthRangeCollection, query, ryanairRoutesCollection);
-        log.info("The routes graph has number of edges={}",routesGraph== null || routesGraph.edgeSet() == null? null: routesGraph.edgeSet().size());
+        log.info("***********The routes graph has number of edges={}***************",routesGraph== null || routesGraph.edgeSet() == null? null: routesGraph.edgeSet().size());
         return calculatePathPort.calculateInterconnectedFlights(query, routesGraph);
 
     }
@@ -45,7 +45,6 @@ public class GetInterconnectedFlightService implements GetInterconnectedFlightUs
                 routesGraph.addVertex(r.getDepartureAirport());
                 routesGraph.addVertex(r.getArrivalAirport());
                 yearMonthRangeDesired.stream().filter(Objects::nonNull).forEach(yearMonth -> {
-                            log.info("Getting Schedule for yearMonth={} for route{}", yearMonth, r);
                             schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(
                                             r.getDepartureAirport(), r.getArrivalAirport(), query, yearMonth)
                                     .stream().filter(Objects::nonNull).collect(Collectors.toList())

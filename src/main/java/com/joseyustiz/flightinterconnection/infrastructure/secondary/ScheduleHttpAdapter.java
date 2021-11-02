@@ -60,6 +60,8 @@ public class ScheduleHttpAdapter implements SchedulePort {
                                                                                                                  @NonNull AirportIataCode arrivalAirport,
                                                                                                                  @NonNull GetInterconnectedFlightUseCase.Query query,
                                                                                                                  @NonNull ScheduleYearMonth yearMonth) {
+
+        log.info("Getting Schedule for yearMonth={} for route.departure={} route.arrival={}", yearMonth, departureAirport, arrivalAirport);
         final Function<UriBuilder, URI> url = uriBuilder -> uriBuilder
                 .scheme("https")
                 .host("timtbl-api.ryanair.com")
@@ -67,7 +69,7 @@ public class ScheduleHttpAdapter implements SchedulePort {
                 .build(departureAirport.getValue(), arrivalAirport.getValue(),
                         yearMonth.getValue().getYear(), yearMonth.getValue().getMonthValue());
 
-        final var flightSchedules = webClient.get().uri(url).retrieve()
+        return webClient.get().uri(url).retrieve()
                 .onStatus(HttpStatus::isError,
                         clientResponse -> Mono.error(new IntegrationException(
                                 String.format("Error calling url %s. HttpResponse: %s", url, clientResponse.statusCode()))))
@@ -75,13 +77,10 @@ public class ScheduleHttpAdapter implements SchedulePort {
                 .filter(dto -> dto!= null && dto.getDays()!=null)
                 .flatMapIterable(dto -> mapper.toDomain(dto, query.getDeparture(), query.getArrival(), yearMonth))
                 .filter(Objects::nonNull)
-                .filter(flightSchedule -> flightSchedule.getDepartureDateTime()!=null && !flightSchedule.getDepartureDateTime().getValue().isBefore(query.getDepartureDateTime().getValue().minusDays(1))
-                        && flightSchedule.getArrivalDateTime()!= null && !flightSchedule.getArrivalDateTime().getValue().isAfter(query.getArrivalDateTime().getValue().plusDays(1))).collectList()
+                .filter(flightSchedule -> flightSchedule.getDepartureDateTime()!=null && !flightSchedule.getDepartureDateTime().getValue().isBefore(query.getDepartureDateTime().getValue().minusHours(4))
+                        && flightSchedule.getArrivalDateTime()!= null && !flightSchedule.getArrivalDateTime().getValue().isAfter(query.getArrivalDateTime().getValue().plusHours(4))).collectList()
                 .filter(Objects::nonNull)
-                .log()
                 .onErrorResume(throwable -> Mono.empty())
                 .block(Duration.ofSeconds(60));
-
-        return flightSchedules;
     }
 }

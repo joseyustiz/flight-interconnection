@@ -31,11 +31,15 @@ public class CalculatePathAdapter implements CalculatePathPort {
         if (routesGraph.edgeSet().size() == 0) {
             return Flux.empty();
         }
+        log.info("******Number of edges={}********", routesGraph.edgeSet().size());
+
         final var resultPaths = new ArrayList<GraphPath<AirportIataCode, FlightScheduleWeightedEdge>>();
 
         final var allDirectedPaths = new AllDirectedPaths<>(routesGraph);
-        final var allPaths = allDirectedPaths.getAllPaths(query.getDeparture(), query.getArrival(), true, 100);
-        allPaths.forEach(path -> {
+        final var allPaths = allDirectedPaths.getAllPaths(query.getDeparture(), query.getArrival(), true, 5);
+        log.info("******Number of potential path={}********", allPaths.size());
+        allPaths.parallelStream().forEach(path -> {
+                    log.info("There is a potential path={}", path);
                     final var connections = path.getEdgeList();
                     if (isDirectFlight(path)) {
                         final var flightScheduleWeightedEdge = connections.get(0);
@@ -48,6 +52,7 @@ public class CalculatePathAdapter implements CalculatePathPort {
                             final var nextFlightScheduleWeightedEdge = connections.get(i + 1);
 
                             if (isInvalidRoute(query, actualFlightScheduleWeightedEdge, nextFlightScheduleWeightedEdge)) {
+                                log.info("Invalid path={}", path);
                                 isInvalid = true;
                                 break;
                             }
