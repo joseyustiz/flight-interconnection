@@ -19,7 +19,7 @@ public class FlightScheduleMapperImpl implements FlightScheduleMapper {
     public List<FlightSchedule> toDomain(ScheduleHttpAdapter.ScheduleDto dto,
                                          AirportIataCode departure, AirportIataCode arrival, ScheduleYearMonth yearMonth) {
         List<FlightSchedule> result = new ArrayList<>();
-        for (ScheduleHttpAdapter.DayScheduleDto daySchedule : dto.days) {
+        dto.days.parallelStream().forEach(daySchedule -> {
             for (ScheduleHttpAdapter.TimeScheduleDto timeSchedule : daySchedule.flights) {
 
                 final var departureTime = LocalTime.parse(timeSchedule.getDepartureTime());
@@ -39,8 +39,8 @@ public class FlightScheduleMapperImpl implements FlightScheduleMapper {
                         .arrivalDateTime(arrivalDateTime)
                         .build());
             }
-        }
-        log.info("result={}", result);
+        });
+
         return result;
     }
 }

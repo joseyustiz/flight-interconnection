@@ -122,7 +122,7 @@ public class GetInterconnectedFlightServiceIT {
                 .build());
         for (FlightSchedule f: flightSchedules) {
             when(schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(eq(f.getDepartureAirport()),
-                    eq(f.getArrivalAirport()), eq(new ScheduleYearMonth(YearMonth.of(2021,11))))).thenReturn(List.of(f));
+                    eq(f.getArrivalAirport()), eq(query), eq(new ScheduleYearMonth(YearMonth.of(2021,11))))).thenReturn(List.of(f));
         }
 
         final var interconnectedFlights = service.handle(query);

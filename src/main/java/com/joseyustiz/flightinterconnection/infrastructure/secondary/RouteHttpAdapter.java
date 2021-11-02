@@ -46,7 +46,7 @@ public class RouteHttpAdapter implements RoutePort {
                 .bodyToFlux(RouteDto.class)
                 .filter(routeDto -> filerByConnectingAirport(connectingAirport, routeDto))
                 .map(mapper::toDomain)
-                .collect(Collectors.toSet()).block(Duration.ofSeconds(10));
+                .collect(Collectors.toSet()).block(Duration.ofSeconds(3));
     }
 
     private boolean filerByConnectingAirport(AirportIataCode connectingAirport, RouteDto routeDto) {

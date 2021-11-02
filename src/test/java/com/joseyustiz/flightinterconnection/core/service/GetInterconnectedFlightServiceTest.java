@@ -114,7 +114,7 @@ class GetInterconnectedFlightServiceTest {
         final var message = "Exception during getting schedule";
         when(routePort.getRoutesByConnectingAirportAndOperatorAsList(any(AirportIataCode.class), any(Airline.class)))
                 .thenReturn(Set.of(ROUTE_DUB_WRO, ROUTE_DUB_STN));
-        when(schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(any(AirportIataCode.class), any(AirportIataCode.class), any(ScheduleYearMonth.class)))
+        when(schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(any(AirportIataCode.class), any(AirportIataCode.class), any(Query.class), any(ScheduleYearMonth.class)))
                 .thenThrow(new RuntimeException(message));
         final var exception = assertThrows(RuntimeException.class, () -> service.handle(VALID_QUERY));
 
@@ -126,7 +126,7 @@ class GetInterconnectedFlightServiceTest {
         final var message = "Exception during calculating Interconnected Flights";
         when(routePort.getRoutesByConnectingAirportAndOperatorAsList(any(AirportIataCode.class), any(Airline.class)))
                 .thenReturn(Set.of(ROUTE_DUB_WRO, ROUTE_DUB_STN));
-        when(schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(any(AirportIataCode.class), any(AirportIataCode.class), any(ScheduleYearMonth.class)))
+        when(schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(any(AirportIataCode.class), any(AirportIataCode.class), any(Query.class), any(ScheduleYearMonth.class)))
                 .thenReturn(Collections.emptyList());
         when(calculatePathPort.calculateInterconnectedFlights(any(), any()))
                 .thenThrow(new RuntimeException(message));
@@ -139,7 +139,7 @@ class GetInterconnectedFlightServiceTest {
     void departureDateTimeEqualToArrivalDateTime_emptyInterconnectedFlights2() {
         when(routePort.getRoutesByConnectingAirportAndOperatorAsList(any(AirportIataCode.class), any(Airline.class)))
                 .thenReturn(Set.of(ROUTE_DUB_WRO, ROUTE_DUB_STN));
-        when(schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(any(AirportIataCode.class), any(AirportIataCode.class), any(ScheduleYearMonth.class)))
+        when(schedulePort.getAvailableFlightsByDepartureAirportAndArrivalAirportAndScheduleYearMonthAsList(any(AirportIataCode.class), any(AirportIataCode.class), any(Query.class), any(ScheduleYearMonth.class)))
                 .thenReturn(Collections.emptyList());
         when(calculatePathPort.calculateInterconnectedFlights(any(), any())).thenReturn(Flux.just(INTERCONNECTED_FLIGHT, INTERCONNECTED_FLIGHT2));
         final var interconnectedFlightFlux = service.handle(VALID_QUERY);
@@ -162,14 +162,14 @@ class GetInterconnectedFlightServiceTest {
         Graphs.addAllVertices(graph, Arrays.asList(airport0, airport1, desiredDeparture, desiredArrival));
         graph.addVertex(airport0);
 
-        graph.addEdge(airport0, desiredArrival, new FlightScheduleWeightedEdge(LocalDateTime.of(2021,11,1,11,0), LocalDateTime.of(2021,11,1,12,0)));
-        graph.addEdge(airport0, airport1, new FlightScheduleWeightedEdge(LocalDateTime.of(2021,11,1,13,0), LocalDateTime.of(2021,11,1,15,0)));
-        graph.addEdge(airport0, desiredDeparture, new FlightScheduleWeightedEdge(LocalDateTime.of(2021,11,1,14,0), LocalDateTime.of(2021,11,1,18,0)));
-        graph.addEdge(airport1, desiredArrival, new FlightScheduleWeightedEdge(LocalDateTime.of(2021,11,1,16,0), LocalDateTime.of(2021,11,1,18,0)));
-        graph.addEdge(desiredDeparture, airport0, new FlightScheduleWeightedEdge(LocalDateTime.of(2021,11,1,8,0), LocalDateTime.of(2021,11,1,10,0)));
-        graph.addEdge(desiredDeparture, airport0, new FlightScheduleWeightedEdge(LocalDateTime.of(2021,11,1,6,0), LocalDateTime.of(2021,11,1,8,0)));
-        graph.addEdge(desiredDeparture, airport1, new FlightScheduleWeightedEdge(LocalDateTime.of(2021,11,1,9,0), LocalDateTime.of(2021,11,1,13,0)));
-        graph.addEdge(desiredDeparture, desiredArrival, new FlightScheduleWeightedEdge(LocalDateTime.of(2021,11,1,12,0), LocalDateTime.of(2021,11,1,15,0)));
+        graph.addEdge(airport0, desiredArrival, new FlightScheduleWeightedEdge(LocalDateTime.of(2021, 11, 1, 11, 0), LocalDateTime.of(2021, 11, 1, 12, 0)));
+        graph.addEdge(airport0, airport1, new FlightScheduleWeightedEdge(LocalDateTime.of(2021, 11, 1, 13, 0), LocalDateTime.of(2021, 11, 1, 15, 0)));
+        graph.addEdge(airport0, desiredDeparture, new FlightScheduleWeightedEdge(LocalDateTime.of(2021, 11, 1, 14, 0), LocalDateTime.of(2021, 11, 1, 18, 0)));
+        graph.addEdge(airport1, desiredArrival, new FlightScheduleWeightedEdge(LocalDateTime.of(2021, 11, 1, 16, 0), LocalDateTime.of(2021, 11, 1, 18, 0)));
+        graph.addEdge(desiredDeparture, airport0, new FlightScheduleWeightedEdge(LocalDateTime.of(2021, 11, 1, 8, 0), LocalDateTime.of(2021, 11, 1, 10, 0)));
+        graph.addEdge(desiredDeparture, airport0, new FlightScheduleWeightedEdge(LocalDateTime.of(2021, 11, 1, 6, 0), LocalDateTime.of(2021, 11, 1, 8, 0)));
+        graph.addEdge(desiredDeparture, airport1, new FlightScheduleWeightedEdge(LocalDateTime.of(2021, 11, 1, 9, 0), LocalDateTime.of(2021, 11, 1, 13, 0)));
+        graph.addEdge(desiredDeparture, desiredArrival, new FlightScheduleWeightedEdge(LocalDateTime.of(2021, 11, 1, 12, 0), LocalDateTime.of(2021, 11, 1, 15, 0)));
 
         Iterator<AirportIataCode> iterator = new DepthFirstIterator<>(graph, desiredDeparture);
         while (iterator.hasNext()) {
@@ -179,8 +179,8 @@ class GetInterconnectedFlightServiceTest {
         System.out.println("-----------------------------");
         AllDirectedPaths<AirportIataCode, FlightScheduleWeightedEdge> allDirectedPaths = new AllDirectedPaths<>(graph);
 
-        LocalDateTime desiredDepartureDatetime = LocalDateTime.of(2021,11,1,8,0);
-        LocalDateTime desiredArrivalDatetime = LocalDateTime.of(2021,11,1,20,0);
+        LocalDateTime desiredDepartureDatetime = LocalDateTime.of(2021, 11, 1, 8, 0);
+        LocalDateTime desiredArrivalDatetime = LocalDateTime.of(2021, 11, 1, 20, 0);
 
         List<GraphPath<AirportIataCode, FlightScheduleWeightedEdge>> resultPaths = new ArrayList<>();
 

@@ -5,9 +5,7 @@ import com.joseyustiz.flightinterconnection.core.port.primary.GetInterconnectedF
 import com.joseyustiz.flightinterconnection.infrastructure.config.WebRouterFunctionConfig
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.GetInterconnectedFlightHandler
 import com.joseyustiz.flightinterconnection.infrastructure.primary.web.InterconnectedFlightMapper
-import com.joseyustiz.flightinterconnection.infrastructure.secondary.CalculatePathAdapter
-import com.joseyustiz.flightinterconnection.infrastructure.secondary.RouteHttpAdapter
-import com.joseyustiz.flightinterconnection.infrastructure.secondary.ScheduleHttpAdapter
+import com.joseyustiz.flightinterconnection.infrastructure.secondary.*
 import io.restassured.module.webtestclient.RestAssuredWebTestClient
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
@@ -16,8 +14,10 @@ import spock.lang.Specification
 abstract class BaseContractSpec extends Specification {
 
     void setup() {
-        def routePort = new RouteHttpAdapter()
-        def schedulePort = new ScheduleHttpAdapter()
+        def routeMapper = new RouteMapperImpl();
+        def routePort = new RouteHttpAdapter(routeMapper)
+        def flightScheduleMapper = new FlightScheduleMapperImpl();
+        def schedulePort = new ScheduleHttpAdapter(flightScheduleMapper)
         def calculatePathPort = new CalculatePathAdapter()
         def service = new GetInterconnectedFlightService(routePort, schedulePort, calculatePathPort)
         service.handle(any() as GetInterconnectedFlightUseCase.Query) >> Flux.empty()
