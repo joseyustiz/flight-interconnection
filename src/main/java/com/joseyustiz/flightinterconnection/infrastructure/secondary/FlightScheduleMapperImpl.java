@@ -37,10 +37,12 @@ public class FlightScheduleMapperImpl implements FlightScheduleMapper {
                 final var departureDateTime = new FlightDateTime(LocalDateTime.of(yearMonth.getValue().getYear(),
                         yearMonth.getValue().getMonth(), daySchedule.day, departureTime.getHour(),
                         departureTime.getMinute()));
-
-                final var arrivalDateTime = new FlightDateTime(LocalDateTime.of(yearMonth.getValue().getYear(),
-                        yearMonth.getValue().getMonth(), daySchedule.day, arrivalTime.getHour(), arrivalTime.getMinute()));
-
+                var additionalDay = 0;
+                if(arrivalTime.isBefore(departureTime)){
+                    additionalDay++;
+                }
+                final var arrivalDateTime =  new FlightDateTime(LocalDateTime.of(yearMonth.getValue().getYear(),
+                        yearMonth.getValue().getMonth(), daySchedule.day, arrivalTime.getHour(), arrivalTime.getMinute()).plusDays(additionalDay));
                 result.add(FlightSchedule.builder()
                         .departureAirport(departure)
                         .arrivalAirport(arrival)
