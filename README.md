@@ -2,7 +2,7 @@
 
 This repository contains a Spring Boot based RESTful API application which serves information about possible direct and interconnected flights (maximum 1 stop) based on the data consumed from external APIs. It makes use of Ryanair public APIs. 
 
-The application should return a list of flights departing from a given departure airport not earlier than the specified departure datetime and arriving to a given arrival airport not later than the specified arrival datetime.
+The application returns a list of flights departing from a given departure airport not earlier than the specified departure datetime and arriving to a given arrival airport not later than the specified arrival datetime.
 The list should consist of:
 * all direct flights if available (for example: DUB - WRO)
 * all interconnected flights with a maximum of one stop if available (for example: DUB - STN - WRO)
@@ -34,6 +34,6 @@ The application is mainly based on Spring Projects, with exception of mapstruct,
 In order to run the application you execute the following commands:
 * `gradle build`
 * `java -jar build/libs/flight-interconnection-0.0.1-SNAPSHOT.jar`.
-## Healthcheck
-Let’s health-check our brand new service:
-* `curl http://localhost:8100/actuator/health`
+
+## Example request
+* `curl localhost:8080/v1/flights/interconnections\?departure=DUB&arrival=WRO\&departureDateTime=2021-11-01T07:00\&arrivalDateTime=2021-11-03T21:00`
