@@ -76,3 +76,5 @@ Querying flights between two days (departureDateTime=2021-11-02T18:00 and arriva
   }
 ]
 ```
+
+**NOTE:** because limitations of Spring Cache annotations to support Reactor and complexity for orchestrating the flows to calculate connections; there is pending work to make the application fully reactive   
