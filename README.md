@@ -36,4 +36,4 @@ In order to run the application you execute the following commands:
 * `java -jar build/libs/flight-interconnection-0.0.1-SNAPSHOT.jar`.
 
 ## Example request
-* `curl localhost:8080/v1/flights/interconnections\?departure=DUB\&arrival=WRO\&departureDateTime=2021-11-01T07:00\&arrivalDateTime=2021-11-01T21:00`
+* `curl localhost:8080/v1/flights/interconnections\?departure=VLC\&arrival=TFS\&departureDateTime=2021-11-02T06:00\&arrivalDateTime=2021-11-02T12:00`
